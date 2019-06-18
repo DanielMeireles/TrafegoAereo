@@ -6,6 +6,7 @@ public class TrafegoAereo {
         
         // Instanciação da torre de controle
         Torre torre = new Torre(1);
+        // Inicialização da Thread da torre de controle
         torre.start();
         
         // Contador para o id de avião
@@ -17,12 +18,13 @@ public class TrafegoAereo {
             // Executa o método que da uma pausa entre as criações de aviões
             pausa();
             
-            // Instanciação do avião e inicialização de sua Thread
-            Aviao aviao = new Aviao(i);
-            aviao.start();
-            
             // Adiciona valor ao contador
             i++;
+            
+            // Instanciação do avião
+            Aviao aviao = new Aviao(i);
+            // Inicialização da Thread do avião
+            aviao.start();
             
         }
         
