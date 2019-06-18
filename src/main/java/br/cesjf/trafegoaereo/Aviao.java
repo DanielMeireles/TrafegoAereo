@@ -57,6 +57,8 @@ public class Aviao extends Thread {
                             this.estado = Estado.TAXIANDO;
                             // Impressão
                             System.out.println("O avião "+this.id+" está taxiando");
+                            // Libera a exclusão mútua da torre para continuar o while
+                            Torre.mutex.release();
                             // Exclusão mútua da pista - Fim
                             Torre.pista.release();
                             break;
@@ -104,6 +106,8 @@ public class Aviao extends Thread {
                             System.out.println("O avião "+this.id+" terminou a decolagem e a pista está livre");
                             // Exclusão mútua da pista - Fim
                             Torre.pista.release();
+                            // Libera a exclusão mútua da torre para continuar o while
+                            Torre.mutex.release();
                             // Altera o valor da variável para finalizar a Thread
                             ativo = false;
                             break;
@@ -113,43 +117,41 @@ public class Aviao extends Thread {
                 } catch (InterruptedException ex) {}
                 
             }
-            
-            
         
     }
     
     // Definição do tempo de pausa
     private static void pausa() {
         try {
-            Thread.sleep((long) Math.round(Math.random() * 5000));
+            Thread.sleep((long) Math.round(Math.random() * 3000));
         } catch (InterruptedException e) {}
     }
     
     // Definição do tempo de pausa
     private static void aterrissando() {
         try {
-            Thread.sleep((long) Math.round(Math.random() * 5000));
+            Thread.sleep((long) Math.round(Math.random() * 3000));
         } catch (InterruptedException e) {}
     }
     
     // Definição do tempo de pausa
     private static void taxiando() {
         try {
-            Thread.sleep((long) Math.round(Math.random() * 5000));
+            Thread.sleep((long) Math.round(Math.random() * 3000));
         } catch (InterruptedException e) {}
     }
     
     // Definição do tempo de pausa
     private static void estacionado() {
         try {
-            Thread.sleep((long) Math.round(Math.random() * 5000));
+            Thread.sleep((long) Math.round(Math.random() * 3000));
         } catch (InterruptedException e) {}
     }
     
     // Definição do tempo de pausa
     private static void decolando() {
         try {
-            Thread.sleep((long) Math.round(Math.random() * 5000));
+            Thread.sleep((long) Math.round(Math.random() * 3000));
         } catch (InterruptedException e) {}
     }
     

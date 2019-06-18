@@ -11,6 +11,8 @@ public class Torre extends Thread {
     public static final Semaphore decolar = new Semaphore(0);
     // Semáforo de aviões aguardando para pousar
     public static final Semaphore pousar = new Semaphore(0);
+    // Exclusão mútua para sincronização da torre com a decolagem ou pouso do avião
+    public static final Semaphore mutex = new Semaphore(0);
 
     // Construtor
     public Torre(int id) {
@@ -29,17 +31,25 @@ public class Torre extends Thread {
                 
                 // Priorização das aterrissagens sob as decolagens
                 if(Torre.pousar.getQueueLength() > 0) {
+                    
                     // Exclusão mútua da pista - Início
                     Torre.pista.acquire();
                     // Libera um avião para pouso
                     Torre.pousar.release();
+                    // Exclusão mútua para que o while não passe desse ponto até o avião terminar o pouso
+                    Torre.mutex.acquire();
+                    
                 } else {
+                    
                     if (Torre.decolar.getQueueLength() > 0) {
                         // Exclusão mútua da pista - Início
                         Torre.pista.acquire();
                         // Libera um avião para decolagem
                         Torre.decolar.release();
+                        // Exclusão mútua para que o while não passe desse ponto até o avião terminar a  decolagem
+                        Torre.mutex.acquire();
                     }
+                    
                 }
 
             }
